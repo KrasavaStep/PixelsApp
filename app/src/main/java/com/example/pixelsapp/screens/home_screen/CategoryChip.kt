@@ -8,11 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.pixelsapp.ui.theme.Primary
 
 @Composable
 fun CategoryChip(text: String, isSelected: Boolean = false) {
     Surface(
-        color = if (isSelected) Color(0xFFB3081B) else Color(0xFFF5F5F5),
+        modifier = Modifier.padding(bottom = 8.dp),
+        color = if (isSelected) Primary else Color(0xFFF5F5F5),
         shape = RoundedCornerShape(20.dp)
     ) {
         Text(

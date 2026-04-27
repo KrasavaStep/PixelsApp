@@ -1,45 +1,84 @@
 package com.example.data.repositories
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
-import androidx.paging.RemoteMediator
+import com.example.data.data.database.PixelsDatabase
 import com.example.data.data.database.entity.PhotoEntity
+import com.example.data.data.network.PixelsApi
+import androidx.paging.RemoteMediator
+import androidx.room.withTransaction
+import com.example.data.data.database.PixelsDao
+import com.example.data.data.database.RemoteKeysDao
+import com.example.data.data.database.entity.RemoteKeysEntity
+import com.example.data.data.network.mappers.toEntity
+import com.example.data.data.network.models.PhotoDTO
+import kotlin.collections.map
+
 
 @OptIn(ExperimentalPagingApi::class)
 class RemoteMediator(
-    private val api: PexelsApi,
-    private val db: AppDatabase
+    private val api: PixelsApi,
+    private val pixelsDao: PixelsDao,
+    private val remoteKeyDao: RemoteKeysDao
 ) : RemoteMediator<Int, PhotoEntity>() {
 
-    override suspend fun load(loadType: LoadType, state: PagingState<Int, PhotoEntity>): MediatorResult {
-        return try {
-            val page = when (loadType) {
-                LoadType.REFRESH -> 1
-                LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
-                LoadType.APPEND -> {
-                    val remoteKeys = getRemoteKeyForLastItem(state)
-                    remoteKeys?.nextKey ?: return MediatorResult.Success(endOfPaginationReached = true)
-                }
+    override suspend fun load(
+        loadType: LoadType,
+        state: PagingState<Int, PhotoEntity>
+    ): MediatorResult {
+        val page = when (loadType) {
+            LoadType.REFRESH -> {
+                val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
+                remoteKeys?.nextKey?.minus(1) ?: 1
             }
 
-            // Запрос в сеть
-            val response = api.getPhotos(page = page, perPage = state.config.pageSize)
+            LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
+            LoadType.APPEND -> {
+                val remoteKeys = getRemoteKeyForLastItem(state)
+                val nextKey = remoteKeys?.nextKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                nextKey
+            }
+        }
+        try {
+            val response = api.getCuratedPhotos(page = page, perPage = state.config.pageSize)
+            val photos = response.body()?.photos ?: emptyList<PhotoDTO>()
+            val endOfPaginationReached = photos.isEmpty()
 
-            // Сохранение в базу
-            db.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    db.remoteKeysDao().clearRemoteKeys()
-                    db.photoDao().clearAll()
-                }
-                val keys = response.photos.map { RemoteKeys(it.id, page + 1) }
-                db.remoteKeysDao().insertAll(keys)
-                db.photoDao().insertAll(response.photos.map { it.toEntity() })
+            if (loadType == LoadType.REFRESH) {
+                remoteKeyDao.clearRemoteKeys()
+                pixelsDao.clearAll()
             }
 
-            MediatorResult.Success(endOfPaginationReached = response.photos.isEmpty())
+            val prevKey = if (page == 1) null else page - 1
+            val nextKey = if (endOfPaginationReached) null else page + 1
+
+            val keys = photos.map { photo ->
+                RemoteKeysEntity(photoId = photo.id, prevKey = prevKey, nextKey = nextKey)
+            }
+
+            remoteKeyDao.insertAll(keys)
+            pixelsDao.insertAll(photos.map { it.toEntity() })
+
+            return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception) {
-            MediatorResult.Error(e)
+            return MediatorResult.Error(e)
+        }
+    }
+
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, PhotoEntity>): RemoteKeysEntity? {
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { photo ->
+            remoteKeyDao.getRemoteKeyByPhotoId(photo.id)
+        }
+    }
+
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, PhotoEntity>): RemoteKeysEntity? {
+        return state.anchorPosition?.let { position ->
+            state.closestItemToPosition(position)?.id?.let { id ->
+                remoteKeyDao.getRemoteKeyByPhotoId(id)
+            }
         }
     }
 }

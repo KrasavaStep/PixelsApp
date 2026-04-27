@@ -13,9 +13,7 @@ data class PhotoEntity(
     val url: String,
     val photographer: String,
     val photographerUrl: String,
-    val photographerId: Int,
     val avgColor: String,
-    @Embedded val src: Src,
     val liked: Boolean,
     val altName: String
 )

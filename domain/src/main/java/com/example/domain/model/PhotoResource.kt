@@ -7,9 +7,7 @@ data class PhotoResource(
     val url: String,
     val photographer: String,
     val photographerUrl: String,
-    val photographerId: Int,
     val avgColor: String,
-    val src: Src,
     val liked: Boolean,
     val altName: String
 )
