@@ -14,6 +14,5 @@ import com.example.data.data.database.entity.RemoteKeysEntity
 )
 abstract class PixelsDatabase() : RoomDatabase() {
     abstract fun getDao(): PixelsDao
-
     abstract fun getRemoteKeyDao(): RemoteKeysDao
 }

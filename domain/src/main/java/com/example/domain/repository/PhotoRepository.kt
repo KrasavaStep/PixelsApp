@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PhotoRepository {
 
-    fun getCuratedPhotos(): Flow<PagingData<PhotoResource>>
+    fun getCuratedPhotos(query: String): Flow<PagingData<PhotoResource>>
 
     suspend fun getPhotoDetails(): PhotoResource
 

@@ -6,5 +6,6 @@ data class PixelsResponseDTO(
     val page: Int,
     @SerializedName("per_page") val perPage: Int,
     val photos: List<PhotoDTO>,
-    @SerializedName("next_page") val nextPage: String
+    @SerializedName("next_page") val nextPage: String,
+    @SerializedName("total_results") val totalResults: Int? = null
 )

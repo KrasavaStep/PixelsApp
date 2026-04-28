@@ -1,7 +1,7 @@
 package com.example.domain.model
 
 data class FeaturedCollection(
-    val id: Int,
+    val id: String,
     val title: String,
     val description: String,
     val private: Boolean,

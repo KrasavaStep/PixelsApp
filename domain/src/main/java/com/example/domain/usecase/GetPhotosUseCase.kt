@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class GetPhotosUseCase @Inject constructor(private val repository: PhotoRepository) {
 
-    operator fun invoke() = repository.getCuratedPhotos()
+    operator fun invoke(query: String) = repository.getCuratedPhotos(query)
 
 
 }

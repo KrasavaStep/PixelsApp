@@ -1,10 +1,9 @@
-package com.example.pixelsapp.screens.home_screen
+package com.example.pixelsapp.screens.home_screen.ui
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -15,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
-import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.example.domain.model.PhotoResource
 import com.example.pixelsapp.R
 import com.example.pixelsapp.utils.shimmerEffect

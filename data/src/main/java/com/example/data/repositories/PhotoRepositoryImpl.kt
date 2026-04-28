@@ -23,10 +23,10 @@ class PhotoRepositoryImpl @Inject constructor(
 ) : PhotoRepository {
 
     @OptIn(ExperimentalPagingApi::class)
-    override fun getCuratedPhotos(): Flow<PagingData<PhotoResource>> {
+    override fun getCuratedPhotos(query: String): Flow<PagingData<PhotoResource>> {
         return Pager(
             config = PagingConfig(pageSize = 30),
-            remoteMediator = RemoteMediator(pixelsApi, pixelsDao, remoteKeyDao),
+            remoteMediator = RemoteMediator(pixelsApi, pixelsDao, remoteKeyDao, query),
             pagingSourceFactory = { pixelsDao.pagingSource() }
         ).flow.map { pagingData ->
             pagingData.map { entity ->

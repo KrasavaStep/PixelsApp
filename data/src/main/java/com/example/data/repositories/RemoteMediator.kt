@@ -8,6 +8,7 @@ import com.example.data.data.database.PixelsDatabase
 import com.example.data.data.database.entity.PhotoEntity
 import com.example.data.data.network.PixelsApi
 import androidx.paging.RemoteMediator
+import androidx.room.util.query
 import androidx.room.withTransaction
 import com.example.data.data.database.PixelsDao
 import com.example.data.data.database.RemoteKeysDao
@@ -21,7 +22,8 @@ import kotlin.collections.map
 class RemoteMediator(
     private val api: PixelsApi,
     private val pixelsDao: PixelsDao,
-    private val remoteKeyDao: RemoteKeysDao
+    private val remoteKeyDao: RemoteKeysDao,
+    private val query: String
 ) : RemoteMediator<Int, PhotoEntity>() {
 
     override suspend fun load(
@@ -43,7 +45,12 @@ class RemoteMediator(
             }
         }
         try {
-            val response = api.getCuratedPhotos(page = page, perPage = state.config.pageSize)
+            val response = if (query.isEmpty()) {
+                api.getCuratedPhotos(page = page, perPage = state.config.pageSize)
+            } else {
+                api.searchPhotos(query = query, page = page, perPage = state.config.pageSize)
+            }
+
             val photos = response.body()?.photos ?: emptyList<PhotoDTO>()
             val endOfPaginationReached = photos.isEmpty()
 

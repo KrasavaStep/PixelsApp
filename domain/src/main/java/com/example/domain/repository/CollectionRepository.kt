@@ -4,7 +4,7 @@ import com.example.domain.model.FeaturedCollection
 
 interface CollectionRepository {
 
-    suspend fun getFeaturedCollections(): List<FeaturedCollection>
+    suspend fun getFeaturedCollections(): Result<List<FeaturedCollection>>
 
     suspend fun saveFeaturedCollection(collection: FeaturedCollection)
 
