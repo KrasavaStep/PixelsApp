@@ -13,11 +13,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -34,6 +37,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val pagedPhotos = uiState.photosPagingData.collectAsLazyPagingItems()
     val snackbarHostState = remember { SnackbarHostState() }
+    val query by viewModel.searchQuery.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.isOffline) {
         if (uiState.isOffline) {
@@ -46,10 +50,20 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
 
+            SearchBar(
+                query = query,
+                onQueryChange = { viewModel.onSearchQueryChange(it) },
+                onSearchExecute = { viewModel.onSearchClicked() },
+                onClear = { viewModel.clearSearch() }
+            )
+
             CollectionRow(
                 collections = uiState.collections,
                 selectedCollection = uiState.selectedCollection,
-                onCollectionClick = { viewModel.onCategorySelected(it) }
+                onCollectionClick = { name ->
+                    viewModel.onSearchQueryChange(name)
+                    viewModel.onCategorySelected(name)
+                }
             )
 
             Box(modifier = Modifier.fillMaxSize()) {
@@ -63,12 +77,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                     }
 
                     is LoadState.NotLoading if pagedPhotos.itemCount == 0 -> {
-
+                        NoResultsScreen { viewModel.onCategorySelected("") }
                     }
 
                     else -> {
-
-                        //SearchBar(modifier = Modifier.padding(16.dp))
 
                         if (uiState.isCollectionsLoading || pagedPhotos.loadState.refresh is LoadState.Loading) {
                             LoadingBar()

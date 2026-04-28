@@ -10,6 +10,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,6 +24,9 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
+
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -44,6 +49,28 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun onSearchQueryChange(newQuery: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _searchQuery
+                .debounce(700)
+                .distinctUntilChanged()
+                .collect { query ->
+                    updatePaging(query)
+                }
+        }
+        _searchQuery.value = newQuery
+        _state.update { it.copy(selectedCollection = newQuery) }
+    }
+
+    fun onSearchClicked() {
+        updatePaging(_searchQuery.value)
+    }
+
+    fun clearSearch() {
+        onSearchQueryChange("")
+        updatePaging()
+    }
+
     fun onCategorySelected(category: String) {
         if (category == _state.value.selectedCollection) return
         _state.update { it.copy(selectedCollection = category) }
@@ -52,7 +79,7 @@ class HomeViewModel @Inject constructor(
 
     private fun updatePaging(query: String = "") {
         val flow = getPhotosUseCase(query).cachedIn(viewModelScope)
-        _state.update { it.copy(photosPagingData = flow) }
+        _state.update { it.copy(photosPagingData = flow, selectedCollection = query) }
     }
 
 }
