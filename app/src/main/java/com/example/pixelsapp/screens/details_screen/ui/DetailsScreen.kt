@@ -16,16 +16,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,17 +47,9 @@ import androidx.compose.runtime.collectAsState
 @Composable
 fun DetailsScreen(
     viewModel: DetailsViewModel,
-    onBackClick: () -> Unit,
-//    onDownloadClick: () -> Unit,
-//    onBookmarkClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     viewModel.handleIntent(DetailsIntent.LoadPhoto())
-
-    //val photo by viewModel.photoState.collectAsStateWithLifecycle()
-
-    //LaunchedEffect(photo.photoData) {
-        //Log.e("TEST_E", photo.photoData.toString())
-    //}
 
     Scaffold(
         topBar = {
@@ -110,24 +98,18 @@ fun DetailsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(
-                    onClick = {
+                val photoState = viewModel.photoState.collectAsStateWithLifecycle().value
 
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF5F5F5)),
-                    shape = RoundedCornerShape(24.dp),
-                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_download),
-                        contentDescription = null,
-                        tint = Color.Black
+                AnimatedDownloadButton {
+                    viewModel.handleIntent(
+                        DetailsIntent.DownloadPhoto(
+                            photoState.photoData?.url ?: "",
+                            photoState.photoData?.photographer ?: ""
+                        )
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Download", color = Color.Black)
                 }
 
-                viewModel.photoState.collectAsStateWithLifecycle().value.let { state ->
+                photoState.let { state ->
                     val icon = if (state.isLiked)
                         ImageVector.vectorResource(R.drawable.ic_bookmark_filled)
                     else ImageVector.vectorResource(R.drawable.ic_boomark)
@@ -142,7 +124,8 @@ fun DetailsScreen(
                     ) {
                         Icon(
                             imageVector = icon,
-                            contentDescription = "Save"
+                            contentDescription = "Save",
+                            tint = Primary
                         )
                     }
                 }

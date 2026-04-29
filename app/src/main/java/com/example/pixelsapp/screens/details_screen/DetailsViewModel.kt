@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.AddToBookmarksUseCase
+import com.example.domain.usecase.DownloadPhotoUseCase
 import com.example.domain.usecase.GetPhotoDetailUseCase
 import com.example.domain.usecase.RemoveFromBookmarksUseCase
 import com.example.domain.util.SourceVariants
@@ -21,8 +22,8 @@ class DetailsViewModel @Inject constructor(
     private val getPhotoDetailUseCase: GetPhotoDetailUseCase,
     private val addToBookmarksUseCase: AddToBookmarksUseCase,
     private val removeFromBookmarksUseCase: RemoveFromBookmarksUseCase,
-    private val
-    savedState: SavedStateHandle
+    private val savedState: SavedStateHandle,
+    private val downloadPhotoUseCase: DownloadPhotoUseCase,
 ) : ViewModel() {
 
     private val photoId = savedState.get<Int>("photo_id") ?: 0
@@ -34,6 +35,7 @@ class DetailsViewModel @Inject constructor(
         when (intent) {
             is DetailsIntent.LoadPhoto -> loadData()
             is DetailsIntent.ToggleLike -> toggleLike(photoId, intent.isLiked)
+            is DetailsIntent.DownloadPhoto -> downloadPhoto(intent.url, intent.photographer)
         }
     }
 
@@ -52,7 +54,6 @@ class DetailsViewModel @Inject constructor(
 
     private fun toggleLike(photoId: Int, isLiked: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.e("TEST_E", isLiked.toString())
             if (isLiked) {
                 removeFromBookmarksUseCase(photoId)
             } else {
@@ -60,14 +61,16 @@ class DetailsViewModel @Inject constructor(
             }
             val photo = getPhotoDetailUseCase(photoId, SourceVariants.LOCAL)
             photo.onSuccess { data ->
-                Log.e("TEST_E", data.toString())
                 _state.update { it.copy(loading = false, isLiked = data.liked) }
             }
                 .onFailure { e ->
-                    Log.e("TEST_E", e.message.toString())
                     _state.update { it.copy(loading = false, errorMessage = e.message) }
                 }
         }
+    }
+
+    private fun downloadPhoto(url: String, photographer: String) {
+        downloadPhotoUseCase(url, photographer)
     }
 
 }
