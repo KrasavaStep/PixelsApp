@@ -37,6 +37,9 @@ interface PixelsDao {
     """)
     fun getLikedPhotos(): Flow<List<PhotosWithLikedStatus>>
 
+    @Query("SELECT EXISTS(SELECT 1 FROM liked_photos_table WHERE id = :id)")
+    fun likeCheckForPhoto(id: Int): Boolean
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addToBookmarks(liked: LikedPhotoEntity)
 

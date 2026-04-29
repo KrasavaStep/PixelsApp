@@ -40,11 +40,19 @@ class PhotoRepositoryImpl @Inject constructor(
     override suspend fun getPhotoDetails(id: Int, source: SourceVariants): Result<PhotoResource> {
         return when (source) {
             SourceVariants.LOCAL -> {
-                runCatching { pixelsDao.getPhotoDetails(id).toPhotoResource() }
+                runCatching {
+                    pixelsDao.getPhotoDetails(id).toPhotoResource().copy(
+                        liked = pixelsDao.likeCheckForPhoto(id)
+                    )
+                }
             }
 
             SourceVariants.REMOTE -> {
-                runCatching { pixelsApi.getPhotoById(id).body().toPhotoResource() }
+                runCatching {
+                    pixelsApi.getPhotoById(id).body().toPhotoResource().copy(
+                        liked = pixelsDao.likeCheckForPhoto(id)
+                    )
+                }
             }
         }
     }

@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.pixelsapp.screens.details_screen.ui.DetailsScreen
-import com.example.pixelsapp.screens.details_screen.ui.DetailsViewModel
+import com.example.pixelsapp.screens.details_screen.DetailsViewModel
 import com.example.pixelsapp.screens.home_screen.ui.HomeScreen
 
 @Composable

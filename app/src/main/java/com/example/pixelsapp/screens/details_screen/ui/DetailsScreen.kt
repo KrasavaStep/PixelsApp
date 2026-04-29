@@ -1,5 +1,6 @@
 package com.example.pixelsapp.screens.details_screen.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,8 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,16 +37,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.pixelsapp.R
 import com.example.pixelsapp.screens.details_screen.DetailsIntent
-import com.example.pixelsapp.screens.home_screen.HomeViewModel
+import com.example.pixelsapp.screens.details_screen.DetailsViewModel
 import com.example.pixelsapp.screens.home_screen.ui.LoadingBar
 import com.example.pixelsapp.ui.theme.Primary
+import androidx.compose.runtime.collectAsState
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -55,11 +55,13 @@ fun DetailsScreen(
 //    onDownloadClick: () -> Unit,
 //    onBookmarkClick: () -> Unit,
 ) {
-
     viewModel.handleIntent(DetailsIntent.LoadPhoto())
 
-    val photo by viewModel.photoState.collectAsStateWithLifecycle()
-    val isLiked = remember { photo.photoData?.liked ?: false }
+    //val photo by viewModel.photoState.collectAsStateWithLifecycle()
+
+    //LaunchedEffect(photo.photoData) {
+        //Log.e("TEST_E", photo.photoData.toString())
+    //}
 
     Scaffold(
         topBar = {
@@ -79,20 +81,21 @@ fun DetailsScreen(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    val photoData = viewModel.photoState.collectAsStateWithLifecycle().value.photoData
                     Text(
-                        text = photo.photoData?.photographer ?: "",
+                        text = photoData?.photographer ?: "",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = photo.photoData?.altName?.ifEmpty { "No description" } ?: "",
+                        text = photoData?.altName?.ifEmpty { "No description" } ?: "",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         color = Color.Gray
                     )
                 }
-                if (photo.loading) {
+                if (viewModel.photoState.collectAsStateWithLifecycle().value.loading) {
                     LoadingBar()
                 } else {
                     Spacer(modifier = Modifier.width(48.dp))
@@ -124,20 +127,24 @@ fun DetailsScreen(
                     Text("Download", color = Color.Black)
                 }
 
-                IconButton(
-                    onClick = {
-                        if (!isLiked) viewModel.handleIntent(DetailsIntent.AddToBookmarks())
-                        else viewModel.handleIntent(DetailsIntent.RemoveFromBookmarks())
-                    },
-                    modifier = Modifier.background(
-                        if (!isLiked) Color(0xFFF5F5F5) else Primary,
-                        RoundedCornerShape(12.dp)
-                    )
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_boomark),
-                        contentDescription = "Save"
-                    )
+                viewModel.photoState.collectAsStateWithLifecycle().value.let { state ->
+                    val icon = if (state.isLiked)
+                        ImageVector.vectorResource(R.drawable.ic_bookmark_filled)
+                    else ImageVector.vectorResource(R.drawable.ic_boomark)
+                    IconButton(
+                        onClick = {
+                            viewModel.handleIntent(DetailsIntent.ToggleLike(state.isLiked))
+                        },
+                        modifier = Modifier.background(
+                            Color(0xFFF5F5F5),
+                            RoundedCornerShape(12.dp)
+                        )
+                    ) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = "Save"
+                        )
+                    }
                 }
             }
         }
@@ -148,8 +155,9 @@ fun DetailsScreen(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
         ) {
+            val photoData = viewModel.photoState.collectAsStateWithLifecycle().value.photoData
             GlideImage(
-                model = photo.photoData?.url,
+                model = photoData?.url,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
