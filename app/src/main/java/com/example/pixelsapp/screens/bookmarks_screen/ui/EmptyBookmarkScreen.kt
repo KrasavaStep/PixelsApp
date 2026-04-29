@@ -15,9 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.pixelsapp.ui.theme.Primary
+import com.example.pixelsapp.R
 
 @Composable
 fun EmptyBookmarkScreen(
@@ -34,7 +35,7 @@ fun EmptyBookmarkScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "You haven't saved anything yet",
+                text = stringResource(R.string.empty_bookmark_screen_message),
                 modifier = Modifier
                     .padding(8.dp),
                 style = MaterialTheme.typography.titleMedium,
@@ -44,7 +45,7 @@ fun EmptyBookmarkScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Explore",
+                text = stringResource(R.string.explore_btn_text),
                 modifier = Modifier
                     .clickable(onClick = { onRetry() })
                     .padding(8.dp),

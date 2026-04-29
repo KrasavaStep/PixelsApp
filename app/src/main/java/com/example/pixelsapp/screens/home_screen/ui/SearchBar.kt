@@ -18,8 +18,10 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.example.pixelsapp.R
 import com.example.pixelsapp.ui.theme.Primary
 
 @Composable
@@ -36,14 +38,18 @@ fun SearchBar(
             .fillMaxWidth()
             .padding(16.dp)
             .height(56.dp),
-        placeholder = { Text("Search", color = Color.Gray) },
+        placeholder = { Text(stringResource(R.string.search_bar_text), color = Color.Gray) },
         leadingIcon = {
             Icon(Icons.Default.Search, contentDescription = null, tint = Primary)
         },
         trailingIcon = {
             if (query.isNotEmpty()) {
                 IconButton(onClick = onClear) {
-                    Icon(Icons.Default.Close, contentDescription = "Clear", tint = Color.Gray)
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = stringResource(R.string.clear_icon_description),
+                        tint = Color.Gray
+                    )
                 }
             }
         },

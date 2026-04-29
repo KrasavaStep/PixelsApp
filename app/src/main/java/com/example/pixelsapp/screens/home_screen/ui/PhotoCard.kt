@@ -9,6 +9,7 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -32,7 +33,7 @@ fun PhotoCard(
     ) {
         GlideImage(
             model = photo.url,
-            contentDescription = "Pexels Image",
+            contentDescription = stringResource(R.string.photo_element_description),
             modifier = Modifier
                 .fillMaxWidth(),
             contentScale = ContentScale.FillWidth,

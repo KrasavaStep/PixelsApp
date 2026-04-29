@@ -12,15 +12,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pixelsapp.R
 import com.example.pixelsapp.screens.details_screen.DetailsIntent
 import com.example.pixelsapp.screens.details_screen.DetailsViewModel
-import com.example.pixelsapp.ui.theme.Primary
 
 @Composable
 fun BottomBar(
@@ -59,7 +58,7 @@ fun BottomBar(
             ) {
                 Icon(
                     imageVector = icon,
-                    contentDescription = "Save",
+                    contentDescription = stringResource(R.string.icon_save_description),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }

@@ -27,13 +27,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pixelsapp.R
-import com.example.pixelsapp.ui.theme.Primary
 
 @Composable
 fun AnimatedDownloadButton(
@@ -48,7 +48,7 @@ fun AnimatedDownloadButton(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
         ),
-        label = "button_scale"
+        label = stringResource(R.string.loader_btn_description)
     )
 
     Surface(
@@ -80,7 +80,7 @@ fun AnimatedDownloadButton(
                 )
             }
             Text(
-                text = "Download",
+                text = stringResource(R.string.loader_btn_text),
                 color = MaterialTheme.colorScheme.tertiary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,

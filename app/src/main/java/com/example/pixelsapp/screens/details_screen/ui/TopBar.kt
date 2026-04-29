@@ -18,10 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.pixelsapp.R
 import com.example.pixelsapp.screens.details_screen.DetailsViewModel
 import com.example.pixelsapp.screens.home_screen.ui.LoadingBar
 
@@ -41,7 +43,9 @@ fun TopBar(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface, CircleShape)
         ) {
             Icon(
-                Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onBackground
+                Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(R.string.arrow_back_description),
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
         Column(
@@ -57,7 +61,7 @@ fun TopBar(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = photoData?.altName?.ifEmpty { "No description" } ?: "",
+                text = photoData?.altName?.ifEmpty { stringResource(R.string.empty_details_name_text) } ?: "",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.Gray
