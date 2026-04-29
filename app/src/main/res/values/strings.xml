@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">PixelsApp</string>
+
+    <!--Content descriptions-->
+    <string name="logo_description">Pexels Logo</string>
+    <string name="loader_btn_description">button scale</string>
+    <string name="icon_save_description">Save</string>
+    <string name="arrow_back_description">Back</string>
+    <string name="try_again_btn">Try Again</string>
+    <string name="no_results_screen_text">No results found</string>
+    <string name="search_bar_text">Search</string>
+
+    <!--Main text-->
+    <string name="empty_bookmark_screen_message">You haven\'t saved anything yet</string>
+    <string name="explore_btn_text">Explore</string>
+    <string name="loader_btn_text">Download</string>
+    <string name="img_no_found_screen_text">No image found</string>
+    <string name="empty_details_name_text">No description</string>
+    <string name="no_connection_icon_description">No Connection</string>
+    <string name="photo_element_description">Pexels Image</string>
+    <string name="clear_icon_description">Clear</string>
 </resources>
