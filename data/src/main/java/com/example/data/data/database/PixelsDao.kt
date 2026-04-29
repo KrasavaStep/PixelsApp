@@ -8,7 +8,6 @@ import androidx.room.Query
 import com.example.data.data.database.entity.LikedPhotoEntity
 import com.example.data.data.database.entity.PhotoEntity
 import com.example.data.data.database.entity.PhotosWithLikedStatus
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PixelsDao {
@@ -35,7 +34,7 @@ interface PixelsDao {
         FROM liked_photos_table
         INNER JOIN photos ON liked_photos_table.id = photos.id
     """)
-    fun getLikedPhotos(): Flow<List<PhotosWithLikedStatus>>
+    suspend fun getLikedPhotos(): List<PhotosWithLikedStatus>
 
     @Query("SELECT EXISTS(SELECT 1 FROM liked_photos_table WHERE id = :id)")
     fun likeCheckForPhoto(id: Int): Boolean

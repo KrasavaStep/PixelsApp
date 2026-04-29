@@ -13,7 +13,7 @@ interface PhotoRepository {
 
     suspend fun saveToBookmarks(photoId: Int)
 
-    fun getLikedPhotos(): Flow<List<PhotoResource>>
+    suspend fun getLikedPhotos(): List<PhotoResource>
 
     suspend fun removeFromBookmarks(photoId: Int)
 

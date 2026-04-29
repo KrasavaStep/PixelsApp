@@ -9,18 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.domain.util.SourceVariants
+import com.example.pixelsapp.screens.home_screen.HomeIntent
 import com.example.pixelsapp.screens.home_screen.HomeViewModel
 import com.example.pixelsapp.utils.shimmerEffect
 
@@ -46,6 +42,8 @@ fun HomeScreen(
     LaunchedEffect(uiState.isOffline) {
         if (uiState.isOffline) {
             snackbarHostState.showSnackbar("Отсутствует подключение к интернету. Показываем кэш.")
+        } else {
+            viewModel.handleIntent(HomeIntent.LoadInitialData())
         }
     }
 
@@ -56,32 +54,32 @@ fun HomeScreen(
 
             SearchBar(
                 query = query,
-                onQueryChange = { viewModel.onSearchQueryChange(it) },
-                onSearchExecute = { viewModel.onSearchClicked() },
-                onClear = { viewModel.clearSearch() }
+                onQueryChange = {  viewModel.handleIntent(HomeIntent.OnSearchQueryChanged(it)) },
+                onSearchExecute = { viewModel.handleIntent(HomeIntent.OnSearchClicked()) },
+                onClear = { viewModel.handleIntent(HomeIntent.ClearSearch()) }
             )
 
             CollectionRow(
                 collections = uiState.collections,
                 selectedCollection = uiState.selectedCollection,
                 onCollectionClick = { name ->
-                    viewModel.onSearchQueryChange(name)
-                    viewModel.onCategorySelected(name)
+                    viewModel.handleIntent(HomeIntent.OnSearchQueryChanged(name))
+                    viewModel.handleIntent(HomeIntent.OnCategorySelected(name))
                 }
             )
 
             Box(modifier = Modifier.fillMaxSize()) {
-                when (pagedPhotos.loadState.refresh) {
-                    is LoadState.Loading if pagedPhotos.itemCount == 0 -> {
+                when {
+                    pagedPhotos.loadState.refresh is LoadState.Loading && pagedPhotos.itemCount == 0 -> {
                         ShimmerGrid()
                     }
 
-                    is LoadState.Error if pagedPhotos.itemCount == 0 -> {
+                    pagedPhotos.itemCount == 0 && pagedPhotos.loadState.refresh is LoadState.Error -> {
                         NetworkErrorScreen { pagedPhotos.retry() }
                     }
 
-                    is LoadState.NotLoading if pagedPhotos.itemCount == 0 -> {
-                        NoResultsScreen { viewModel.onCategorySelected("") }
+                    pagedPhotos.itemCount == 0 && pagedPhotos.loadState.refresh is LoadState.NotLoading -> {
+                        NoResultsScreen { pagedPhotos.retry() }
                     }
 
                     else -> {

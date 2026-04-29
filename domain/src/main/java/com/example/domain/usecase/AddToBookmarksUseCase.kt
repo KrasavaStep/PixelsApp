@@ -1,6 +1,5 @@
 package com.example.domain.usecase
 
-import com.example.domain.model.PhotoResource
 import com.example.domain.repository.PhotoRepository
 import javax.inject.Inject
 

@@ -62,9 +62,10 @@ class PhotoRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getLikedPhotos(): Flow<List<PhotoResource>> {
-        return pixelsDao.getLikedPhotos().map { entity -> entity.map { it.toPhotoResource() } }
+    override suspend fun getLikedPhotos(): List<PhotoResource> {
+        return pixelsDao.getLikedPhotos().map { entity -> entity.toPhotoResource() }
     }
+
 
     override suspend fun removeFromBookmarks(photoId: Int) {
         pixelsDao.removeFromBookmarks(photoId)

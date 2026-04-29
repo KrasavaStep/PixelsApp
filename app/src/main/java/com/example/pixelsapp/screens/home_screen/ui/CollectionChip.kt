@@ -22,13 +22,13 @@ fun CollectionChip(
             .padding(end = 8.dp)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(20.dp),
-        color = if (isSelected) Color(0xFFB3081B) else Color(0xFFF5F5F5)
+        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
     ) {
         Text(
             text = collection,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
             style = MaterialTheme.typography.bodyMedium,
-            color = if (isSelected) Color.White else Color.Black
+            color = if (isSelected) Color.White else MaterialTheme.colorScheme.tertiary
         )
     }
 }

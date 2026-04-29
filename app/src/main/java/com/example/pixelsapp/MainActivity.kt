@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.pixelsapp.screens.navigation.AppNavigation
+import com.example.pixelsapp.screens.navigation.PixelsBottomBar
+import com.example.pixelsapp.screens.navigation.Route
 import com.example.pixelsapp.ui.theme.PixelsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,28 +27,28 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PixelsAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val navController = rememberNavController()
+
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+
+                val screensWithoutBottomBar = listOf(
+                    Route.Details.route
+                )
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        if (currentRoute !in screensWithoutBottomBar) {
+                            PixelsBottomBar(navController = navController)
+                        }
+                    }
+                ) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        AppNavigation()
+                        AppNavigation(navController = navController)
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PixelsAppTheme {
-        Greeting("Android")
     }
 }

@@ -2,19 +2,19 @@ package com.example.pixelsapp.screens.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.pixelsapp.screens.details_screen.ui.DetailsScreen
+import com.example.pixelsapp.screens.bookmarks_screen.BookmarksViewModel
+import com.example.pixelsapp.screens.bookmarks_screen.ui.BookmarksScreen
 import com.example.pixelsapp.screens.details_screen.DetailsViewModel
+import com.example.pixelsapp.screens.details_screen.ui.DetailsScreen
 import com.example.pixelsapp.screens.home_screen.ui.HomeScreen
 
 @Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-
+fun AppNavigation(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = Route.Home.route
@@ -41,21 +41,19 @@ fun AppNavigation() {
             )
         }
 
+        // Bookmarks screen
+        composable(
+            route = Route.Bookmarks.route
+        ) { backStackEntry ->
+            val viewModel: BookmarksViewModel = hiltViewModel()
+            BookmarksScreen(
+                viewModel,
+                onBackClick = { navController.popBackStack() },
+                onPhotoClick = { id, source ->
+                    navController.navigate(Route.Details.createRoute(id, source))
+                }
+            )
+        }
 
-        //composable(
-            //route = Route.ItemList.route
-        //) { backStackEntry ->
-            //val tag = backStackEntry.arguments?.getString("tag_category") ?: ""
-            //val category = CategoryName.valueOf(tag.toUpperCase(Locale.current))
-            //val viewModel: ItemListViewModel =
-            //    koinViewModel(qualifier = named("list_vm")) { parametersOf(category) }
-            //ListScreen(
-            //    viewModel = viewModel,
-            //   onBackClick = { navController.popBackStack() },
-            //    onItemClick = { detailsTag, id ->
-            //        navController.navigate(Route.Details.createRoute(detailsTag, id.id))
-             //   }
-            //)
-       // }
     }
 }

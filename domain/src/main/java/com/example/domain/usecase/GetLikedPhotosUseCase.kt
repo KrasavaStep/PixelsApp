@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class GetLikedPhotosUseCase @Inject constructor(private val repository: PhotoRepository) {
 
-    operator fun invoke() = repository.getLikedPhotos()
+    suspend operator fun invoke() = repository.getLikedPhotos()
 
 }

@@ -5,7 +5,6 @@ import com.example.data.data.network.models.CollectionDTO
 import com.example.data.data.network.models.PhotoDTO
 import com.example.domain.model.FeaturedCollection
 import com.example.domain.model.PhotoResource
-import kotlin.Int
 
 fun PhotoDTO.toEntity(): PhotoEntity {
     return PhotoEntity(

@@ -37,19 +37,29 @@ class HomeViewModel @Inject constructor(
         loadInitialData()
     }
 
+    fun handleIntent(intent: HomeIntent) {
+        when (intent) {
+            is HomeIntent.ClearSearch -> clearSearch()
+            is HomeIntent.OnCategorySelected -> onCategorySelected(intent.category)
+            is HomeIntent.OnSearchClicked -> onSearchClicked()
+            is HomeIntent.OnSearchQueryChanged -> onSearchQueryChange(intent.query)
+            is HomeIntent.LoadInitialData -> loadInitialData()
+        }
+    }
+
     private fun loadInitialData() {
         viewModelScope.launch {
             _state.update { it.copy(isCollectionsLoading = true) }
             getCollectionsUseCase().onSuccess { data ->
                 _state.update { it.copy(collections = data, isCollectionsLoading = false) }
-                updatePaging()
             }.onFailure { error ->
                 _state.update { it.copy(errorMessage = error.message, isCollectionsLoading = false) }
             }
         }
+        updatePaging()
     }
 
-    fun onSearchQueryChange(newQuery: String) {
+    private fun onSearchQueryChange(newQuery: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _searchQuery
                 .debounce(700)
@@ -62,24 +72,30 @@ class HomeViewModel @Inject constructor(
         _state.update { it.copy(selectedCollection = newQuery) }
     }
 
-    fun onSearchClicked() {
+    private fun onSearchClicked() {
         updatePaging(_searchQuery.value)
     }
 
-    fun clearSearch() {
+    private fun clearSearch() {
         onSearchQueryChange("")
         updatePaging()
     }
 
-    fun onCategorySelected(category: String) {
+    private fun onCategorySelected(category: String) {
         if (category == _state.value.selectedCollection) return
         _state.update { it.copy(selectedCollection = category) }
         updatePaging(category)
     }
 
     private fun updatePaging(query: String = "") {
-        val flow = getPhotosUseCase(query).cachedIn(viewModelScope)
-        _state.update { it.copy(photosPagingData = flow, selectedCollection = query) }
+        val flow = runCatching {
+            getPhotosUseCase(query).cachedIn(viewModelScope)
+        }
+        flow.onSuccess { data ->
+            _state.update { it.copy(photosPagingData = data, selectedCollection = query) }
+        }.onFailure { error ->
+            _state.update { it.copy(errorMessage = error.message, isCollectionsLoading = false) }
+        }
     }
 
 }

@@ -1,22 +1,16 @@
 package com.example.data.repositories
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
-import com.example.data.data.database.PixelsDatabase
-import com.example.data.data.database.entity.PhotoEntity
-import com.example.data.data.network.PixelsApi
 import androidx.paging.RemoteMediator
-import androidx.room.util.query
-import androidx.room.withTransaction
 import com.example.data.data.database.PixelsDao
 import com.example.data.data.database.RemoteKeysDao
 import com.example.data.data.database.entity.PhotosWithLikedStatus
 import com.example.data.data.database.entity.RemoteKeysEntity
+import com.example.data.data.network.PixelsApi
 import com.example.data.data.network.mappers.toEntity
 import com.example.data.data.network.models.PhotoDTO
-import kotlin.collections.map
 
 
 @OptIn(ExperimentalPagingApi::class)

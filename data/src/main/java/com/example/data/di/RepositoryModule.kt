@@ -1,6 +1,5 @@
 package com.example.data.di
 
-import com.example.data.data.database.CollectionDao
 import com.example.data.data.database.PixelsDao
 import com.example.data.data.database.RemoteKeysDao
 import com.example.data.data.network.PixelsApi

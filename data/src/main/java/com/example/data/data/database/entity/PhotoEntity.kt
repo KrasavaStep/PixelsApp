@@ -1,9 +1,7 @@
 package com.example.data.data.database.entity
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.domain.model.Src
 
 @Entity(tableName = "photos")
 data class PhotoEntity(
