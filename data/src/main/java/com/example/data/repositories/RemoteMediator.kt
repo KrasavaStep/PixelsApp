@@ -12,6 +12,7 @@ import androidx.room.util.query
 import androidx.room.withTransaction
 import com.example.data.data.database.PixelsDao
 import com.example.data.data.database.RemoteKeysDao
+import com.example.data.data.database.entity.PhotosWithLikedStatus
 import com.example.data.data.database.entity.RemoteKeysEntity
 import com.example.data.data.network.mappers.toEntity
 import com.example.data.data.network.models.PhotoDTO
@@ -24,11 +25,11 @@ class RemoteMediator(
     private val pixelsDao: PixelsDao,
     private val remoteKeyDao: RemoteKeysDao,
     private val query: String
-) : RemoteMediator<Int, PhotoEntity>() {
+) : RemoteMediator<Int, PhotosWithLikedStatus>() {
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, PhotoEntity>
+        state: PagingState<Int, PhotosWithLikedStatus>
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
@@ -75,15 +76,15 @@ class RemoteMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, PhotoEntity>): RemoteKeysEntity? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, PhotosWithLikedStatus>): RemoteKeysEntity? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { photo ->
-            remoteKeyDao.getRemoteKeyByPhotoId(photo.id)
+            remoteKeyDao.getRemoteKeyByPhotoId(photo.cachedPhotos.id)
         }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, PhotoEntity>): RemoteKeysEntity? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, PhotosWithLikedStatus>): RemoteKeysEntity? {
         return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.id?.let { id ->
+            state.closestItemToPosition(position)?.cachedPhotos?.id?.let { id ->
                 remoteKeyDao.getRemoteKeyByPhotoId(id)
             }
         }

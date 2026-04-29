@@ -29,11 +29,15 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.domain.util.SourceVariants
 import com.example.pixelsapp.screens.home_screen.HomeViewModel
 import com.example.pixelsapp.utils.shimmerEffect
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    onPhotoClick: (id: Int, source: String) -> Unit
+) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val pagedPhotos = uiState.photosPagingData.collectAsLazyPagingItems()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -97,7 +101,9 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         ) {
                             items(pagedPhotos.itemCount) { index ->
                                 pagedPhotos[index]?.let { photo ->
-                                    PhotoCard(photo)
+                                    PhotoCard(photo) { id ->
+                                        onPhotoClick(id, SourceVariants.REMOTE.source)
+                                    }
                                 }
                             }
 

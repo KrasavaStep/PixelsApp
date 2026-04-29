@@ -1,6 +1,5 @@
 package com.example.data.repositories
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -8,10 +7,13 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.example.data.data.database.PixelsDao
 import com.example.data.data.database.RemoteKeysDao
+import com.example.data.data.database.entity.LikedPhotoEntity
 import com.example.data.data.database.entity.mapper.toPhotoResource
 import com.example.data.data.network.PixelsApi
+import com.example.data.data.network.mappers.toPhotoResource
 import com.example.domain.model.PhotoResource
 import com.example.domain.repository.PhotoRepository
+import com.example.domain.util.SourceVariants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -35,11 +37,29 @@ class PhotoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPhotoDetails(): PhotoResource {
-        TODO("Not yet implemented")
+    override suspend fun getPhotoDetails(id: Int, source: SourceVariants): Result<PhotoResource> {
+        return when (source) {
+            SourceVariants.LOCAL -> {
+                runCatching { pixelsDao.getPhotoDetails(id).toPhotoResource() }
+            }
+
+            SourceVariants.REMOTE -> {
+                runCatching { pixelsApi.getPhotoById(id).body().toPhotoResource() }
+            }
+        }
     }
 
-    override suspend fun savePhotoData(photo: PhotoResource) {
-        TODO("Not yet implemented")
+    override suspend fun saveToBookmarks(photoId: Int) {
+        pixelsDao.addToBookmarks(LikedPhotoEntity(photoId))
     }
+
+
+    override fun getLikedPhotos(): Flow<List<PhotoResource>> {
+        return pixelsDao.getLikedPhotos().map { entity -> entity.map { it.toPhotoResource() } }
+    }
+
+    override suspend fun removeFromBookmarks(photoId: Int) {
+        pixelsDao.removeFromBookmarks(photoId)
+    }
+
 }

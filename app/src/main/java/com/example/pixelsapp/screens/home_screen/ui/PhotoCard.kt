@@ -20,14 +20,17 @@ import com.example.pixelsapp.utils.shimmerEffect
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun PhotoCard(photo: PhotoResource) {
+fun PhotoCard(
+    photo: PhotoResource,
+    onPhotoClick: (Int) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        onClick = { onPhotoClick(photo.id) }
     ) {
-        Log.e("HEIGHT_ERR", photo.height.toString())
         GlideImage(
             model = photo.url,
             contentDescription = "Pexels Image",

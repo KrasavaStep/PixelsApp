@@ -1,8 +1,23 @@
 package com.example.data.data.database.entity.mapper
 
 import com.example.data.data.database.entity.PhotoEntity
+import com.example.data.data.database.entity.PhotosWithLikedStatus
 import com.example.domain.model.PhotoResource
 import java.net.URI
+
+fun PhotosWithLikedStatus.toPhotoResource(): PhotoResource {
+    return PhotoResource(
+        this.cachedPhotos.id,
+        photographer = this.cachedPhotos.photographer,
+        url = this.cachedPhotos.url,
+        height = getPhotoHeight(this.cachedPhotos.url),
+        width = getPhotoWidth(this.cachedPhotos.url),
+        avgColor = this.cachedPhotos.avgColor,
+        photographerUrl = this.cachedPhotos.photographerUrl,
+        liked = this.isLiked,
+        altName = this.cachedPhotos.altName
+    )
+}
 
 fun PhotoEntity.toPhotoResource(): PhotoResource {
     return PhotoResource(

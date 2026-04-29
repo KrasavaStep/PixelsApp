@@ -45,12 +45,12 @@ fun NoResultsScreen(
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Text(
                 text = "Explore",
                 modifier = Modifier
-                    .clickable(onClick = onRetry)
+                    .clickable(onClick = { onRetry() })
                     .padding(8.dp),
                 style = MaterialTheme.typography.titleMedium,
                 color = Primary,
