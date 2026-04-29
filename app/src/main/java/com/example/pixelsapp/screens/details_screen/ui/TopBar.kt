@@ -60,12 +60,6 @@ fun TopBar(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-            Text(
-                text = photoData?.altName?.ifEmpty { stringResource(R.string.empty_details_name_text) } ?: "",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.Gray
-            )
         }
         if (viewModel.photoState.collectAsStateWithLifecycle().value.loading) {
             LoadingBar()
