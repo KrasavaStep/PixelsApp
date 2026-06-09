@@ -5,6 +5,7 @@ import com.example.data.data.database.entity.PhotosWithLikedStatus
 import com.example.domain.model.PhotoResource
 import java.net.URI
 
+//TODO Повыносить мапперы
 fun PhotosWithLikedStatus.toPhotoResource(): PhotoResource {
     return PhotoResource(
         this.cachedPhotos.id,
@@ -33,6 +34,7 @@ fun PhotoEntity.toPhotoResource(): PhotoResource {
     )
 }
 
+//TODO вынести в экстеншн либо в др место
 private fun getPhotoHeight(url: String): Int {
     val query = URI(url).query
 

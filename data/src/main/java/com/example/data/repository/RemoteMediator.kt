@@ -1,4 +1,4 @@
-package com.example.data.repositories
+package com.example.data.repository
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -13,6 +13,7 @@ import com.example.data.data.network.mappers.toEntity
 import com.example.data.data.network.models.PhotoDTO
 
 
+//TODO -> вынести в UI вместе с пагером
 @OptIn(ExperimentalPagingApi::class)
 class RemoteMediator(
     private val api: PixelsApi,

@@ -19,11 +19,13 @@ object DatabaseModule {
     fun provideDatabase(
         application: Application
     ): PixelsDatabase {
+        //TODO -> строку в константы
         return Room.databaseBuilder(application, PixelsDatabase::class.java, "pixel_db")
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
     }
 
+    //TODO -> нейминги должны быть явные + явно возвращаемый тип
     @Singleton
     @Provides
     fun provideDAO(db: PixelsDatabase) = db.getDao()

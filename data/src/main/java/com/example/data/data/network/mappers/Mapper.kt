@@ -6,6 +6,8 @@ import com.example.data.data.network.models.PhotoDTO
 import com.example.domain.model.FeaturedCollection
 import com.example.domain.model.PhotoResource
 
+//TODO -> маппаеры по разным файлвм
+
 fun PhotoDTO.toEntity(): PhotoEntity {
     return PhotoEntity(
         id = this.id,
@@ -44,3 +46,6 @@ fun CollectionDTO.toCollection(): FeaturedCollection {
         photosCount = this.photosCount
     )
 }
+
+fun List<CollectionDTO>?.toCollections(): List<FeaturedCollection> =
+    this?.map { it.toCollection() } ?: emptyList()

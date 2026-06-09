@@ -12,6 +12,7 @@ data class PhotoResource(
     val altName: String
 )
 
+//Remove Src
 data class Src(
     val original: String,
     val large2x: String,

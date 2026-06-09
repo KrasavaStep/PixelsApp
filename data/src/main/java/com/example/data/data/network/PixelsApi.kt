@@ -10,6 +10,7 @@ import retrofit2.http.Query
 
 interface PixelsApi {
 
+    //TODO -> Обёртки "Rsponse" можно не делать, а если делать то чисто свои кастомные
     @GET("curated")
     suspend fun getCuratedPhotos(
         @Query("page") page: Int,

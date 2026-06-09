@@ -24,7 +24,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.domain.util.SourceVariants
+import com.example.domain.util.SourceVariant
 import com.example.pixelsapp.screens.home_screen.HomeIntent
 import com.example.pixelsapp.screens.home_screen.HomeViewModel
 import com.example.pixelsapp.utils.shimmerEffect
@@ -100,7 +100,7 @@ fun HomeScreen(
                             items(pagedPhotos.itemCount) { index ->
                                 pagedPhotos[index]?.let { photo ->
                                     PhotoCard(photo) { id ->
-                                        onPhotoClick(id, SourceVariants.REMOTE.source)
+                                        onPhotoClick(id, SourceVariant.REMOTE.source)
                                     }
                                 }
                             }

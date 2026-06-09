@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.domain.util.SourceVariants
+import com.example.domain.util.SourceVariant
 import com.example.pixelsapp.screens.bookmarks_screen.BookmarksIntent
 import com.example.pixelsapp.screens.bookmarks_screen.BookmarksViewModel
 import com.example.pixelsapp.screens.home_screen.ui.ShimmerGrid
@@ -71,7 +71,7 @@ fun BookmarksScreen(
                 items(state.data) { photo ->
                     BookmarkPhotoCard(
                         photo = photo
-                    ) { onPhotoClick(photo.id, SourceVariants.LOCAL.source) }
+                    ) { onPhotoClick(photo.id, SourceVariant.LOCAL.source) }
                 }
             }
         }

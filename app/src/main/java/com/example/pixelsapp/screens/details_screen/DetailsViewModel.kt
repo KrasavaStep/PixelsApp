@@ -7,7 +7,7 @@ import com.example.domain.usecase.AddToBookmarksUseCase
 import com.example.domain.usecase.DownloadPhotoUseCase
 import com.example.domain.usecase.GetPhotoDetailUseCase
 import com.example.domain.usecase.RemoveFromBookmarksUseCase
-import com.example.domain.util.SourceVariants
+import com.example.domain.util.SourceVariant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +41,7 @@ class DetailsViewModel @Inject constructor(
     private fun loadData() {
         _state.update { it.copy(loading = true, errorMessage = null) }
         viewModelScope.launch(Dispatchers.IO) {
-            val photo = getPhotoDetailUseCase(photoId, SourceVariants.valueOf(source.uppercase()))
+            val photo = getPhotoDetailUseCase(photoId, SourceVariant.valueOf(source.uppercase()))
             photo.onSuccess { data ->
                 _state.update { it.copy(loading = false, photoData = data, isLiked = data.liked) }
             }
@@ -58,7 +58,7 @@ class DetailsViewModel @Inject constructor(
             } else {
                 addToBookmarksUseCase(photoId)
             }
-            val photo = getPhotoDetailUseCase(photoId, SourceVariants.LOCAL)
+            val photo = getPhotoDetailUseCase(photoId, SourceVariant.LOCAL)
             photo.onSuccess { data ->
                 _state.update { it.copy(loading = false, isLiked = data.liked) }
             }

@@ -1,4 +1,4 @@
-package com.example.data.repositories
+package com.example.data.repository
 
 import com.example.data.data.network.PixelsApi
 import com.example.data.data.network.mappers.toCollection
@@ -12,7 +12,8 @@ class CollectionRepositoryImpl @Inject constructor(
 
     override suspend fun getFeaturedCollections(): Result<List<FeaturedCollection>> {
         return runCatching {
-            pixelsApi.getCollections().body()?.collections?.map { it.toCollection() } ?: emptyList()
+            //TODO -> маппинг сделать
+            pixelsApi.getCollections().body()?.toCollection()
         }
     }
 

@@ -9,6 +9,8 @@ import com.example.data.data.database.entity.LikedPhotoEntity
 import com.example.data.data.database.entity.PhotoEntity
 import com.example.data.data.database.entity.PhotosWithLikedStatus
 
+
+//TODO попробовать в отдельную константу query
 @Dao
 interface PixelsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

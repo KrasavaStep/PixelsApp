@@ -3,8 +3,8 @@ package com.example.data.di
 import com.example.data.data.database.PixelsDao
 import com.example.data.data.database.RemoteKeysDao
 import com.example.data.data.network.PixelsApi
-import com.example.data.repositories.CollectionRepositoryImpl
-import com.example.data.repositories.PhotoRepositoryImpl
+import com.example.data.repository.CollectionRepositoryImpl
+import com.example.data.repository.PhotoRepositoryImpl
 import com.example.domain.repository.CollectionRepository
 import com.example.domain.repository.PhotoRepository
 import dagger.Module
