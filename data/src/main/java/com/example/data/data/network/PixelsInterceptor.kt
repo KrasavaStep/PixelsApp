@@ -12,10 +12,14 @@ class PixelsInterceptor() : Interceptor {
         val originalRequest = chain.request()
 
         val newRequest = originalRequest.newBuilder()
-            .header("Authorization", BuildConfig.PIXELS_API_KEY)
+            .header(AUTHORIZATION_HEADER, BuildConfig.PIXELS_API_KEY)
             .build()
 
         return chain.proceed(newRequest)
+    }
+
+    companion object {
+        const val AUTHORIZATION_HEADER = "Authorization"
     }
 
 }

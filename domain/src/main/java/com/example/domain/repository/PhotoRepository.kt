@@ -9,9 +9,11 @@ interface PhotoRepository {
 
     fun getCuratedPhotos(query: String): Flow<PagingData<PhotoResource>>
 
-    suspend fun getPhotoDetails(id: Int, source: SourceVariants): Result<PhotoResource>
+    suspend fun getPhotoDetails(photoId: Int, source: SourceVariants): Result<PhotoResource>
 
     suspend fun saveToBookmarks(photoId: Int)
+
+    fun downloadPhoto(url: String, fileName: String)
 
     suspend fun getLikedPhotos(): List<PhotoResource>
 

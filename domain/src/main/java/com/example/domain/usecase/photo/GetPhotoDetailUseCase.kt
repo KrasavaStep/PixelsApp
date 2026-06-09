@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.photo
 
 import com.example.domain.model.PhotoResource
 import com.example.domain.repository.PhotoRepository
@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class GetPhotoDetailUseCase @Inject constructor(private val repository: PhotoRepository) {
 
-    suspend operator fun invoke(id: Int, source: SourceVariants): Result<PhotoResource> {
-        return repository.getPhotoDetails(id, source)
+    suspend operator fun invoke(photoId: Int, source: SourceVariants): Result<PhotoResource> {
+        return repository.getPhotoDetails(photoId, source)
     }
 
 }

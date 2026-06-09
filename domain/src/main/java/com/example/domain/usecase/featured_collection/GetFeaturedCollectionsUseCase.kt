@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.featured_collection
 
 import com.example.domain.model.FeaturedCollection
 import com.example.domain.repository.CollectionRepository

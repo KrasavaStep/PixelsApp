@@ -3,8 +3,8 @@ package com.example.pixelsapp.screens.home_screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.example.domain.usecase.GetFeaturedCollectionsUseCase
-import com.example.domain.usecase.GetPhotosUseCase
+import com.example.domain.usecase.featured_collection.GetFeaturedCollectionsUseCase
+import com.example.domain.usecase.photo.GetPhotosUseCase
 import com.example.pixelsapp.utils.NetworkMonitor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

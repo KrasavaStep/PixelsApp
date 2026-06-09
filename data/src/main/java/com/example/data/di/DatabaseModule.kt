@@ -14,19 +14,21 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+    const val DATABASE_NAME = "pixel_db"
+
     @Singleton
     @Provides
     fun provideDatabase(
         application: Application
     ): PixelsDatabase {
-        return Room.databaseBuilder(application, PixelsDatabase::class.java, "pixel_db")
+        return Room.databaseBuilder(application, PixelsDatabase::class.java, DATABASE_NAME)
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideDAO(db: PixelsDatabase) = db.getDao()
+    fun providePixelsDAO(db: PixelsDatabase) = db.getPixelsDao()
 
     @Singleton
     @Provides

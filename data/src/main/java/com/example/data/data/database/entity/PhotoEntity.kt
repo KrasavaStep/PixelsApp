@@ -3,7 +3,9 @@ package com.example.data.data.database.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "photos")
+const val PHOTO_TABLE_NAME = "photos"
+
+@Entity(tableName = PHOTO_TABLE_NAME)
 data class PhotoEntity(
     @PrimaryKey val id: Int,
     val width: Int,

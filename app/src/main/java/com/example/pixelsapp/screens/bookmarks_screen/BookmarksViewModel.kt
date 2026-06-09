@@ -2,7 +2,7 @@ package com.example.pixelsapp.screens.bookmarks_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.usecase.GetLikedPhotosUseCase
+import com.example.domain.usecase.photo.GetLikedPhotosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

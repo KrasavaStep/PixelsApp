@@ -1,4 +1,4 @@
-package com.example.data.repositories
+package com.example.data.repository
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -9,8 +9,8 @@ import com.example.data.data.database.RemoteKeysDao
 import com.example.data.data.database.entity.PhotosWithLikedStatus
 import com.example.data.data.database.entity.RemoteKeysEntity
 import com.example.data.data.network.PixelsApi
-import com.example.data.data.network.mappers.toEntity
-import com.example.data.data.network.models.PhotoDTO
+import com.example.data.data.network.mapper.toEntity
+import com.example.data.data.network.model.PhotoDTO
 
 
 @OptIn(ExperimentalPagingApi::class)
