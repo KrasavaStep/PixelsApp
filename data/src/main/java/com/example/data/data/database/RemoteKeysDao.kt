@@ -10,7 +10,7 @@ import com.example.data.data.database.entity.RemoteKeysEntity
 interface RemoteKeysDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(remoteKey: List<RemoteKeysEntity>)
+    suspend fun insertAll(remoteKeyList: List<RemoteKeysEntity>)
 
     @Query("SELECT * FROM remote_keys WHERE photoId = :id")
     suspend fun getRemoteKeyByPhotoId(id: Int): RemoteKeysEntity?

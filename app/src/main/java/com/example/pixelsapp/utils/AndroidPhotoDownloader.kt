@@ -4,7 +4,6 @@ import android.app.DownloadManager
 import android.content.Context
 import android.os.Environment
 import androidx.core.net.toUri
-import com.example.domain.repository.PhotoDownloader
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

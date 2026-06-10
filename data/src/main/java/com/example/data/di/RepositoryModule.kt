@@ -3,6 +3,10 @@ package com.example.data.di
 import android.content.Context
 import com.example.data.data.database.PixelsDao
 import com.example.data.data.database.RemoteKeysDao
+import com.example.data.data.datasource.local_datasource.MediatorKeyLocalDataSource
+import com.example.data.data.datasource.local_datasource.PhotoLocalDataSource
+import com.example.data.data.datasource.local_datasource.PhotoLocalDataSourceImpl
+import com.example.data.data.datasource.remote_datasource.PhotoRemoteDataSource
 import com.example.data.data.network.PixelsApi
 import com.example.data.repository.CollectionRepositoryImpl
 import com.example.data.repository.PhotoRepositoryImpl
@@ -24,15 +28,15 @@ object RepositoryModule {
     @Provides
     fun providePhotoRepository(
         @ApplicationContext context: Context,
-        pixelsDao: PixelsDao,
-        api: PixelsApi,
-        remoteKeyDao: RemoteKeysDao
+        remoteDataSource: PhotoRemoteDataSource,
+        localDataSource: PhotoLocalDataSource,
+        mediatorKeyLocalDataSource: MediatorKeyLocalDataSource
     ): PhotoRepository {
         return PhotoRepositoryImpl(
-            context,
-            pixelsApi = api,
-            pixelsDao = pixelsDao,
-            remoteKeyDao = remoteKeyDao
+            context = context,
+            remoteDataSource = remoteDataSource,
+            localDataSource = localDataSource,
+            keyLocalDataSource = mediatorKeyLocalDataSource
         )
     }
 

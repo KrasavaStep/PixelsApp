@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.example.domain.usecase.featured_collection.GetFeaturedCollectionsUseCase
-import com.example.domain.usecase.photo.GetPhotosUseCase
+import com.example.domain.usecase.photo.GetCuratedPhotosUseCase
 import com.example.pixelsapp.utils.NetworkMonitor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPhotosUseCase: GetPhotosUseCase,
+    private val getPhotosUseCase: GetCuratedPhotosUseCase,
     private val getCollectionsUseCase: GetFeaturedCollectionsUseCase,
     private val networkMonitor: NetworkMonitor
 ) : ViewModel() {
@@ -62,7 +62,7 @@ class HomeViewModel @Inject constructor(
     private fun onSearchQueryChange(newQuery: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _searchQuery
-                .debounce(700)
+                .debounce(SEARCH_QUERY_DEBOUNCE) //TODO -> const
                 .distinctUntilChanged()
                 .collect { query ->
                     updatePaging(query)
@@ -96,6 +96,10 @@ class HomeViewModel @Inject constructor(
         }.onFailure { error ->
             _state.update { it.copy(errorMessage = error.message, isCollectionsLoading = false) }
         }
+    }
+
+    companion object {
+        const val SEARCH_QUERY_DEBOUNCE: Long = 700
     }
 
 }

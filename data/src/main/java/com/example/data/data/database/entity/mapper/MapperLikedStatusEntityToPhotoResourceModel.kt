@@ -16,3 +16,6 @@ fun PhotosWithLikedStatus.toPhotoResource(): PhotoResource {
         altName = this.cachedPhotos.altName
     )
 }
+
+fun List<PhotosWithLikedStatus>.toPhotoResourceList(): List<PhotoResource> =
+    this.map { it.toPhotoResource() }

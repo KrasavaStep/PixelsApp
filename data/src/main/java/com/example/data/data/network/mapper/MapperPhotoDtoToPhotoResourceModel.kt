@@ -16,3 +16,6 @@ fun PhotoDTO?.toPhotoResourceModel(): PhotoResource {
         altName = this?.altName ?: "",
     )
 }
+
+fun List<PhotoDTO>.toPhotoResourceList(): List<PhotoResource> =
+    this.map { it.toPhotoResourceModel() }
