@@ -5,5 +5,6 @@ data class PhotoResponseModel(
     val perPage: Int,
     val photos: List<PhotoResource>,
     val nextPage: String,
+    val prevPage: String,
     val totalResults: Int? = null
 )

@@ -1,10 +1,10 @@
 package com.example.data.di
 
 import com.example.data.data.database.PixelsDao
-import com.example.data.data.datasource.local_datasource.PhotoLocalDataSource
-import com.example.data.data.datasource.local_datasource.PhotoLocalDataSourceImpl
-import com.example.data.data.datasource.remote_datasource.PhotoRemoteDataSource
-import com.example.data.data.datasource.remote_datasource.PhotoRemoteDataSourceImpl
+import com.example.data.data.datasource.local.PhotoLocalDataSource
+import com.example.data.data.datasource.local.impl.PhotoLocalDataSourceImpl
+import com.example.data.data.datasource.remote.PhotoRemoteDataSource
+import com.example.data.data.datasource.remote.impl.PhotoRemoteDataSourceImpl
 import com.example.data.data.network.PixelsApi
 import dagger.Module
 import dagger.Provides

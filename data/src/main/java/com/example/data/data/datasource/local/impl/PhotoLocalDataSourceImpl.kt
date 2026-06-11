@@ -1,4 +1,4 @@
-package com.example.data.data.datasource.local_datasource
+package com.example.data.data.datasource.local.impl
 
 import androidx.paging.PagingSource
 import com.example.data.data.database.PixelsDao
@@ -7,15 +7,18 @@ import com.example.data.data.database.entity.PhotoEntity
 import com.example.data.data.database.entity.mapper.toPhotoEntityList
 import com.example.data.data.database.entity.mapper.toPhotoResource
 import com.example.data.data.database.entity.mapper.toPhotoResourceList
+import com.example.data.data.datasource.local.PhotoLocalDataSource
 import com.example.domain.model.PhotoResource
+import com.example.domain.model.PhotoResponseModel
 import javax.inject.Inject
 
 class PhotoLocalDataSourceImpl @Inject constructor(
     private val pixelsDao: PixelsDao
 ): PhotoLocalDataSource {
 
-    override suspend fun insertAllPhotos(photos: List<PhotoResource>) {
-        pixelsDao.insertAll(photos.toPhotoEntityList())
+    override suspend fun insertAllPhotos(photoResponse: PhotoResponseModel) {
+        val photos = photoResponse.photos.toPhotoEntityList(photoResponse.page)
+        pixelsDao.insertAll(photos)
     }
 
     override suspend fun getPhotoById(photoId: Int): Result<PhotoResource> {
@@ -44,7 +47,7 @@ class PhotoLocalDataSourceImpl @Inject constructor(
         return pixelsDao.getLikedPhotos().toPhotoResourceList()
     }
 
-    override suspend fun cleatAllPhotos() {
+    override suspend fun clearAllPhotos() {
         pixelsDao.clearAll()
     }
 }

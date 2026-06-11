@@ -7,7 +7,7 @@ const val PHOTO_TABLE_NAME = "photos"
 
 @Entity(tableName = PHOTO_TABLE_NAME)
 data class PhotoEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = false) val id: Int,
     val width: Int,
     val height: Int,
     val url: String,
@@ -15,5 +15,6 @@ data class PhotoEntity(
     val photographerUrl: String,
     val avgColor: String,
     val liked: Boolean,
-    val altName: String
+    val altName: String,
+    val page: Int
 )

@@ -8,41 +8,39 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.map
-import com.example.data.data.database.entity.mapper.toPhotoResource
 import com.example.data.data.database.entity.mapper.toPhotoResourceFlow
-import com.example.data.data.datasource.local_datasource.MediatorKeyLocalDataSource
-import com.example.data.data.datasource.local_datasource.PhotoLocalDataSource
-import com.example.data.data.datasource.remote_datasource.PhotoRemoteDataSource
+import com.example.data.data.datasource.local.PhotoLocalDataSource
+import com.example.data.data.datasource.remote.PhotoRemoteDataSource
+import com.example.data.data.network.monitor.NetworkMonitor
 import com.example.domain.model.PhotoResource
 import com.example.domain.repository.PhotoRepository
 import com.example.domain.util.SourceVariants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val remoteDataSource: PhotoRemoteDataSource,
     private val localDataSource: PhotoLocalDataSource,
-    private val keyLocalDataSource: MediatorKeyLocalDataSource
+    private val networkMonitor: NetworkMonitor
 ) : PhotoRepository {
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getCuratedPhotos(query: String): Flow<PagingData<PhotoResource>> {
+        val pagingSourceFactory = { localDataSource.getPagedPhotos() }
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
-                enablePlaceholders = false //TODO -> need deeper check
+                prefetchDistance = PREFETCH_DISTANCE,
+                initialLoadSize = PAGE_SIZE
             ),
             remoteMediator = PhotoRemoteMediator(
-                remoteDataSource,
                 localDataSource,
-                keyLocalDataSource,
-                query
+                remoteDataSource,
+                networkMonitor
             ),
-            pagingSourceFactory = { localDataSource.getPagedPhotos() }
+            pagingSourceFactory = pagingSourceFactory
         ).flow.toPhotoResourceFlow()
     }
 
@@ -85,5 +83,6 @@ class PhotoRepositoryImpl @Inject constructor(
 
     companion object {
         const val PAGE_SIZE = 30
+        const val PREFETCH_DISTANCE = 2
     }
 }

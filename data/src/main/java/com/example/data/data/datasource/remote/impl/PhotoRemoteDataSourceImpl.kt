@@ -1,5 +1,6 @@
-package com.example.data.data.datasource.remote_datasource
+package com.example.data.data.datasource.remote.impl
 
+import com.example.data.data.datasource.remote.PhotoRemoteDataSource
 import com.example.data.data.network.PixelsApi
 import com.example.data.data.network.mapper.toPhotoResourceModel
 import com.example.data.data.network.mapper.toPhotoResponseModel

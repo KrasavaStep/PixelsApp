@@ -1,4 +1,4 @@
-package com.example.data.data.datasource.remote_datasource
+package com.example.data.data.datasource.remote
 
 import com.example.domain.model.PhotoResource
 import com.example.domain.model.PhotoResponseModel

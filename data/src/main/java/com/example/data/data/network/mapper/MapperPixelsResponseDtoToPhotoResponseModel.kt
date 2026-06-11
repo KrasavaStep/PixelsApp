@@ -8,7 +8,8 @@ fun PixelsResponseDTO.toPhotoResponseModel(): PhotoResponseModel {
         page = this.page,
         perPage = this.perPage,
         photos = this.photos.toPhotoResourceList(),
-        nextPage = this.nextPage,
+        nextPage = this.nextPage ?: "",
+        prevPage = this.prevPage ?: "",
         totalResults = this.totalResults
     )
 }

@@ -1,12 +1,13 @@
-package com.example.data.data.datasource.local_datasource
+package com.example.data.data.datasource.local
 
 import androidx.paging.PagingSource
 import com.example.data.data.database.entity.PhotoEntity
 import com.example.domain.model.PhotoResource
+import com.example.domain.model.PhotoResponseModel
 
 interface PhotoLocalDataSource {
 
-    suspend fun insertAllPhotos(photos: List<PhotoResource>)
+    suspend fun insertAllPhotos(photoResponse: PhotoResponseModel)
 
     suspend fun getPhotoById(photoId: Int): Result<PhotoResource>
 
@@ -20,6 +21,6 @@ interface PhotoLocalDataSource {
 
     suspend fun getLikedPhotos(): List<PhotoResource>
 
-    suspend fun cleatAllPhotos()
+    suspend fun clearAllPhotos()
 
 }

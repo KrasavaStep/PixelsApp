@@ -8,6 +8,7 @@ import javax.inject.Inject
 
 class GetCuratedPhotosUseCase @Inject constructor(private val repository: PhotoRepository) {
 
+    //TODO -> remove pagerData
     operator fun invoke(query: String): Flow<PagingData<PhotoResource>> {
         return repository.getCuratedPhotos(query)
     }

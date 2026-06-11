@@ -4,17 +4,14 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.data.data.database.entity.LikedPhotoEntity
 import com.example.data.data.database.entity.PhotoEntity
-import com.example.data.data.database.entity.RemoteKeysEntity
 
 @Database(
     entities = [
         PhotoEntity::class,
-        RemoteKeysEntity::class,
         LikedPhotoEntity::class
     ],
     version = 1
 )
 abstract class PixelsDatabase() : RoomDatabase() {
     abstract fun getPixelsDao(): PixelsDao
-    abstract fun getRemoteKeyDao(): RemoteKeysDao
 }

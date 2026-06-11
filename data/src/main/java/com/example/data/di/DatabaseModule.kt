@@ -30,8 +30,5 @@ object DatabaseModule {
     @Provides
     fun providePixelsDAO(db: PixelsDatabase) = db.getPixelsDao()
 
-    @Singleton
-    @Provides
-    fun provideRemoteKeysDAO(db: PixelsDatabase) = db.getRemoteKeyDao()
 
 }
