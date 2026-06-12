@@ -3,7 +3,9 @@ package com.example.data.data.database.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "collection_table")
+const val COLLECTION_TABLE_NAME = "collection_table"
+
+@Entity(tableName = COLLECTION_TABLE_NAME)
 data class CollectionEntity(
     @PrimaryKey val id: Int,
     val title: String,

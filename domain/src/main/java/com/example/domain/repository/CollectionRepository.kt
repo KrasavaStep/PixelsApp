@@ -6,6 +6,4 @@ interface CollectionRepository {
 
     suspend fun getFeaturedCollections(): Result<List<FeaturedCollection>>
 
-    suspend fun saveFeaturedCollection(collection: FeaturedCollection)
-
 }

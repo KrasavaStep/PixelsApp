@@ -3,10 +3,10 @@ package com.example.pixelsapp.screens.details_screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.usecase.AddToBookmarksUseCase
-import com.example.domain.usecase.DownloadPhotoUseCase
-import com.example.domain.usecase.GetPhotoDetailUseCase
-import com.example.domain.usecase.RemoveFromBookmarksUseCase
+import com.example.domain.usecase.bookmark.AddToBookmarksUseCase
+import com.example.domain.usecase.photo.DownloadPhotoUseCase
+import com.example.domain.usecase.photo.GetPhotoDetailUseCase
+import com.example.domain.usecase.bookmark.RemoveFromBookmarksUseCase
 import com.example.domain.util.SourceVariants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
